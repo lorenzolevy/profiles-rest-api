@@ -3,6 +3,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, viewsets, filters # status: list of HTTP status codes
 from rest_framework.authentication import TokenAuthentication
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.settings import api_settings
 
 from profiles_api import serializers # What data to expect for post, put, patch
 from profiles_api import models 
@@ -109,6 +111,13 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     # Adds search param to HTTP request
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name', 'email')
+
+
+class UserLoginApiView(ObtainAuthToken):
+    """Handle creating user authentication tokens"""
+    renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
+    
+
 
 
 
