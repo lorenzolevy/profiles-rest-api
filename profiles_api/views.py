@@ -1,7 +1,7 @@
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status, viewsets # status: list of HTTP status codes
+from rest_framework import status, viewsets, filters # status: list of HTTP status codes
 from rest_framework.authentication import TokenAuthentication
 
 from profiles_api import serializers # What data to expect for post, put, patch
@@ -106,6 +106,9 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     queryset = models.UserProfile.objects.all()
     authentication_classes = (TokenAuthentication,)
     permission_classes = (permissions.UpdateOwnProfile,)
+    # Adds search param to HTTP request
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name', 'email')
 
 
 
