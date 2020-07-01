@@ -4,9 +4,10 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.models import BaseUserManager
+from django.conf import settings
 
 
-
+# Make migrations to create DB tables for model
 
 class UserProfileManager(BaseUserManager):
     """Manager for user profiles"""
@@ -65,3 +66,17 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
         return self.email
 
 
+
+class ProfileFeedItem(models.Model):
+    """Profile Status Update"""
+    
+    user_profile = models.ForeignKey(
+        settings.AUTH_USER_MODEL, # from settings.py in project files
+        on_delete = models.CASCADE, # delete user profile, and the feed item associated with CASCADE
+    )
+    status_text = models.CharField(max_length = 255) # like a tweet
+    created_on = models.DateTimeField(auto_now_add = True) # Date/time of creation
+
+    def __str__(self):
+        """Return the model as a string"""
+        return self.status_text
