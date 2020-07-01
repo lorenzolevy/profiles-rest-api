@@ -2,8 +2,11 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, viewsets # status: list of HTTP status codes
+from rest_framework.authentication import TokenAuthentication
 
 from profiles_api import serializers # What data to expect for post, put, patch
+from profiles_api import models 
+from profiles_api import permissions
 
 # Needs a function for each HTTP request, is assigned a URL
 class HelloApiView(APIView):
@@ -95,8 +98,14 @@ class HelloViewSet(viewsets.ViewSet):
     def destroy(self, request, pk=None):
         """Handle deleting an object"""
         return Response({'http_method': 'DELETE'})
-    
 
+
+class UserProfileViewSet(viewsets.ModelViewSet):
+    """Handle creating and updating profiles"""
+    serializer_class = serializers.UserProfileSerializer
+    queryset = models.UserProfile.objects.all()
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (permissions.UpdateOwnProfile,)
 
 
 
